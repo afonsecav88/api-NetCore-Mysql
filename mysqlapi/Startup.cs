@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +15,7 @@ using mysqlapi.Models;
 using mysqlapi.Services;
 using System;
 using System.IO;
+using System.Net.Mime;
 using System.Reflection;
 using System.Text;
 
@@ -49,14 +51,13 @@ namespace mysqlapi
             services.AddAutoMapper(typeof(StudentDetailMappings));
 
             //***** Configuracion de servicios para JWT *****
-            //autorizacion
+            //autorización
             services.AddAuthorization(options =>
                 options.DefaultPolicy =
                 new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
                 .RequireAuthenticatedUser().Build()
             );
-
-            //estos valores los obtenemos de nuestro appsettings
+                      
             var issuer = Configuration["AuthenticationSettings:Issuer"];
             var audience = Configuration["AuthenticationSettings:Audience"];
             var signinKey = Configuration["AuthenticationSettings:SigningKey"];
@@ -77,7 +78,20 @@ namespace mysqlapi
 
             //***** Aqui termina la Configuracion de servicios para JWT *****
 
-            services.AddControllers();
+
+            services.AddControllers()
+            //***** Aqui comienza la Configuracion para el manejo y captura de error y excepciones *****
+            .ConfigureApiBehaviorOptions(options =>
+             {
+                 options.InvalidModelStateResponseFactory = context =>
+                 {
+                     var result = new BadRequestObjectResult(context.ModelState);                   
+                     result.ContentTypes.Add(MediaTypeNames.Application.Json);
+                     result.ContentTypes.Add(MediaTypeNames.Application.Xml);
+                     return result;
+                 };
+             });
+            //***** Aqui termina la Configuracion para el manejo y captura de error y excepciones *****
 
             services.AddSwaggerGen(c =>
             {
@@ -106,7 +120,7 @@ namespace mysqlapi
             services.AddScoped<IAuthService, AuthService>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+      
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -114,6 +128,11 @@ namespace mysqlapi
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "mysqlapi v1"));
+            }
+            else
+            {
+                //Agregado para el manejo y captura de error y excepciones 
+                app.UseExceptionHandler("/error");
             }
 
             app.UseHttpsRedirection();
