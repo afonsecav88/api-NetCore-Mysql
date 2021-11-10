@@ -4,10 +4,47 @@
         <name>mysqlapi</name>
     </assembly>
     <members>
+        <member name="M:mysqlapi.Controllers.v1.AuthController.Token(System.String,System.String)">
+            <summary>
+            Loguea al usuario y genera un token de autenticación
+            </summary>
+            <param name="Username"></param>
+            <param name="Password"></param>
+            <returns></returns>
+        </member>
+        <member name="M:mysqlapi.Controllers.StudentDetailsController.CreateStudentDetail(mysqlapi.Models.StudentDetail)">
+            <summary>
+            Crea un nuevo estudiante
+            </summary>
+            <param name="studentDetail"></param>
+            <returns></returns>
+        </member>
         <member name="M:mysqlapi.Controllers.StudentDetailsController.GetStudentDetails">
             <summary>
             Retorna todos los Estudiantes
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:mysqlapi.Controllers.StudentDetailsController.GetStudentDetail(System.Int32)">
+            <summary>
+            Busca un estudiante basandose en su id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:mysqlapi.Controllers.StudentDetailsController.DeleteStudentDetail(System.Int32)">
+            <summary>
+            Elimina un estudiante basado en su id 
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:mysqlapi.Controllers.StudentDetailsController.PutStudentDetail(System.Int32,mysqlapi.Models.StudentDetail)">
+            <summary>
+            Actualiza los datos de un estudiante basado en su id
+            </summary>
+            <param name="id"></param>
+            <param name="studentDetail"></param>
             <returns></returns>
         </member>
     </members>

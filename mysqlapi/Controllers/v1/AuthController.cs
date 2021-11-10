@@ -6,6 +6,7 @@ using System;
 
 namespace mysqlapi.Controllers.v1
 {
+
     [ApiController]
     [Route("api/v{version:apiVersion}/login")]
     [ApiVersion("1.0")]   
@@ -18,7 +19,12 @@ namespace mysqlapi.Controllers.v1
             _authService = authService;
         }
 
-
+        /// <summary>
+        /// Loguea al usuario y genera un token de autenticación
+        /// </summary>
+        /// <param name="Username"></param>
+        /// <param name="Password"></param>
+        /// <returns></returns>
         [HttpPost("loginAndGenerateToken")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

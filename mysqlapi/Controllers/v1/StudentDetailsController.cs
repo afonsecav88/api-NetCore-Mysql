@@ -12,7 +12,7 @@ using mysqlapi.Models;
 
 namespace mysqlapi.Controllers
 {
-    [ApiConventionType(typeof(DefaultApiConventions))]
+    /*[ApiConventionType(typeof(DefaultApiConventions))]*/
     [ApiController]
     [Route("api/v{version:apiVersion}/StudentDetail")]
     [ApiVersion("1.0")]
@@ -29,6 +29,11 @@ namespace mysqlapi.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Crea un nuevo estudiante
+        /// </summary>
+        /// <param name="studentDetail"></param>
+        /// <returns></returns>
 
         [HttpPost("create")]
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -71,7 +76,11 @@ namespace mysqlapi.Controllers
             return Ok(resultDto);
         }
 
-
+        /// <summary>
+        /// Busca un estudiante basandose en su id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}", Name = "getStudentById")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -87,9 +96,14 @@ namespace mysqlapi.Controllers
         }
 
 
+        /// <summary>
+        /// Elimina un estudiante basado en su id 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id}", Name = "deleteStudentDetails")]
-        /* [ProducesResponseType(StatusCodes.Status204NoContent)]
-         [ProducesResponseType(StatusCodes.Status400BadRequest)]*/
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ApiConventionMethod(typeof(DefaultApiConventions),
                              nameof(DefaultApiConventions.Delete))]
         public async Task<IActionResult> DeleteStudentDetail(int id)
@@ -100,17 +114,23 @@ namespace mysqlapi.Controllers
 
             else await _studentDetail.DeleteStudentDetail(result);
 
-            return Ok( new {
+            return Ok(new
+            {
                 status = "terminated",
                 message = "The student has been eliminated"
             });
         }
 
-
+        /// <summary>
+        /// Actualiza los datos de un estudiante basado en su id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="studentDetail"></param>
+        /// <returns></returns>
         [HttpPut("{id}", Name = "updateStudentDetails")]
-        /* [ProducesResponseType(StatusCodes.Status204NoContent)]
-         [ProducesResponseType(StatusCodes.Status404NotFound)]
-         [ProducesResponseType(StatusCodes.Status400BadRequest)]*/
+        /*[ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]*/
         [ApiConventionMethod(typeof(DefaultApiConventions),
                              nameof(DefaultApiConventions.Put))]
         public async Task<IActionResult> PutStudentDetail(int id, StudentDetail studentDetail)
