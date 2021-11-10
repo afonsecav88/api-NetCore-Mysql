@@ -9,7 +9,7 @@ namespace mysqlapi.Controllers.v1
 
     [ApiController]
     [Route("api/v{version:apiVersion}/login")]
-    [ApiVersion("1.0")]   
+    [ApiVersion("1.0")]
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
@@ -30,7 +30,7 @@ namespace mysqlapi.Controllers.v1
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
 
         //Username and Password are in the DB.Users
-        public ActionResult Token(string Username,string Password)
+        public ActionResult Token(string Username, string Password)
         {
             if (_authService.ValidateLogin(Username, Password))
             {
@@ -38,7 +38,7 @@ namespace mysqlapi.Controllers.v1
                 var validity = TimeSpan.FromMinutes(60);
                 var expirationDate = currentDate.Add(validity);
 
-                var token = _authService.GenerateToken(currentDate,Username, validity);
+                var token = _authService.GenerateToken(currentDate, Username, validity);
                 return Ok(new
                 {
                     Token = token,

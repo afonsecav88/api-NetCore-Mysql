@@ -33,12 +33,14 @@ namespace mysqlapi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //Recuperando la cadena de conexion desde secret.json
+            var connectionString = Configuration["ConnectionStrings:DBConn"];
 
             //configuracion de la conexion
             var serverVersion = new MySqlServerVersion(new Version(8, 0, 27));
             services.AddDbContext<StudentDetailContext>(
                 dbContextOptions => dbContextOptions
-                    .UseMySql(Configuration.GetConnectionString("DBConn"), serverVersion)
+                    .UseMySql(connectionString, serverVersion)
                     .LogTo(Console.WriteLine, LogLevel.Information)
                     .EnableSensitiveDataLogging()
                     .EnableDetailedErrors()
@@ -57,7 +59,7 @@ namespace mysqlapi
                 new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
                 .RequireAuthenticatedUser().Build()
             );
-                      
+
             var issuer = Configuration["AuthenticationSettings:Issuer"];
             var audience = Configuration["AuthenticationSettings:Audience"];
             var signinKey = Configuration["AuthenticationSettings:SigningKey"];
@@ -85,7 +87,7 @@ namespace mysqlapi
              {
                  options.InvalidModelStateResponseFactory = context =>
                  {
-                     var result = new BadRequestObjectResult(context.ModelState);                   
+                     var result = new BadRequestObjectResult(context.ModelState);
                      result.ContentTypes.Add(MediaTypeNames.Application.Json);
                      result.ContentTypes.Add(MediaTypeNames.Application.Xml);
                      return result;
@@ -120,7 +122,7 @@ namespace mysqlapi
             services.AddScoped<IAuthService, AuthService>();
         }
 
-      
+
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
