@@ -12,6 +12,7 @@ using mysqlapi.Models;
 
 namespace mysqlapi.Controllers
 {
+    [ApiConventionType(typeof(DefaultApiConventions))]
     [ApiController]
     [Route("api/v{version:apiVersion}/StudentDetail")]
     [ApiVersion("1.0")]
@@ -46,9 +47,12 @@ namespace mysqlapi.Controllers
                 return CreatedAtRoute("getStudentById", new { id = studentDetail.Id }, studentDetail);
             }
         }
-
-
-        [HttpGet("getAllStudents")]
+        //Agregado para la documentacion xml
+        /// <summary>
+        /// Retorna todos los Estudiantes
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("StudentDetails")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<IEnumerable<StudentDetailDto>>> GetStudentDetails()
@@ -84,27 +88,31 @@ namespace mysqlapi.Controllers
 
 
         [HttpDelete("{id}", Name = "deleteStudentDetails")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        /* [ProducesResponseType(StatusCodes.Status204NoContent)]
+         [ProducesResponseType(StatusCodes.Status400BadRequest)]*/
+        [ApiConventionMethod(typeof(DefaultApiConventions),
+                             nameof(DefaultApiConventions.Delete))]
         public async Task<IActionResult> DeleteStudentDetail(int id)
         {
             var result = await _studentDetail.GetStudentDetailById(id);
-            if (result == null)
-            {
-                return BadRequest();
-            }
-            else
-            {
-                await _studentDetail.DeleteStudentDetail(result);
-                return NoContent();
-            }
+
+            if (result == null) return BadRequest();
+
+            else await _studentDetail.DeleteStudentDetail(result);
+
+            return Ok( new {
+                status = "terminated",
+                message = "The student has been eliminated"
+            });
         }
 
 
         [HttpPut("{id}", Name = "updateStudentDetails")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        /* [ProducesResponseType(StatusCodes.Status204NoContent)]
+         [ProducesResponseType(StatusCodes.Status404NotFound)]
+         [ProducesResponseType(StatusCodes.Status400BadRequest)]*/
+        [ApiConventionMethod(typeof(DefaultApiConventions),
+                             nameof(DefaultApiConventions.Put))]
         public async Task<IActionResult> PutStudentDetail(int id, StudentDetail studentDetail)
         {
             if (id != studentDetail.Id) return BadRequest();

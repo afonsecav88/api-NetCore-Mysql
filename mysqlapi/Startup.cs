@@ -13,6 +13,8 @@ using mysqlapi.Interfaces;
 using mysqlapi.Models;
 using mysqlapi.Services;
 using System;
+using System.IO;
+using System.Reflection;
 using System.Text;
 
 namespace mysqlapi
@@ -79,7 +81,24 @@ namespace mysqlapi
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "mysqlapi", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "Student Details Api",
+                    Description = "A sample Asp.Net Core web Api that allows you work with Student Details Data",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Adrián Fonseca Vega",
+                        Email = "afonsecav88@gmail.com",
+                        Url = new Uri("https://www.linkedin.com/in/adrianfvega/")
+                    },
+                    Version = "v1"
+                });
+
+                //Añadido para Generar la documentación xml en las métodos
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+
             });
 
             //Contenedor de Dependencias
