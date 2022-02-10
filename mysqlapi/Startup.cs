@@ -36,7 +36,7 @@ namespace mysqlapi
             //Recuperando la cadena de conexion desde secret.json
             var connectionString = Configuration["ConnectionStrings:DBConn"];
 
-            //configuracion de la conexion
+            //configuracion de la conexion a la base de datos
             var serverVersion = new MySqlServerVersion(new Version(8, 0, 27));
             services.AddDbContext<StudentDetailContext>(
                 dbContextOptions => dbContextOptions
@@ -49,11 +49,11 @@ namespace mysqlapi
             //versionado de la api
             services.AddApiVersioning();
 
-            //Configuración para automapper
+            //Configuraciï¿½n para automapper
             services.AddAutoMapper(typeof(StudentDetailMappings));
 
             //***** Configuracion de servicios para JWT *****
-            //autorización
+            //autorizaciï¿½n
             services.AddAuthorization(options =>
                 options.DefaultPolicy =
                 new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
@@ -103,14 +103,14 @@ namespace mysqlapi
                     Description = "A sample Asp.Net Core web Api that allows you work with Student Details Data",
                     Contact = new OpenApiContact
                     {
-                        Name = "Adrián Fonseca Vega",
+                        Name = "Adriï¿½n Fonseca Vega",
                         Email = "afonsecav88@gmail.com",
                         Url = new Uri("https://www.linkedin.com/in/adrianfvega/")
                     },
                     Version = "v1"
                 });
 
-                //Añadido para Generar la documentación xml en las métodos
+                //Aï¿½adido para Generar la documentaciï¿½n xml en las mï¿½todos
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
@@ -141,7 +141,7 @@ namespace mysqlapi
 
             app.UseRouting();
 
-            //Configurando la aplicación para JWT
+            //Configurando la aplicaciï¿½n para JWT
             app.UseAuthentication();
 
             app.UseAuthorization();
