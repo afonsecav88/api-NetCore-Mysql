@@ -53,7 +53,7 @@ namespace mysqlapi
             services.AddAutoMapper(typeof(StudentDetailMappings));
 
             //***** Configuracion de servicios para JWT *****
-            //autorizaci�n
+            //autorizacion
             services.AddAuthorization(options =>
                 options.DefaultPolicy =
                 new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
